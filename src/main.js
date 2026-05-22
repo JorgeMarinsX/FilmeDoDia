@@ -1,4 +1,4 @@
-const TMDB_API_KEY = 'TMDB_API_KEY_PLACEHOLDER';
+const TMDB_API_KEY = '87aacf316759cd77f037515901f4be3e';
 const TMDB_BASE = 'https://api.themoviedb.org/3';
 const IMG_BASE = 'https://image.tmdb.org/t/p/w500';
 
@@ -45,14 +45,14 @@ async function fetchRandomMovie() {
         params.set('with_original_language', LATIN_SCRIPT_LANGS);
     }
 
+    let minDate = null;
     if (onlyRecent) {
         const tenYearsAgo = new Date();
         tenYearsAgo.setFullYear(tenYearsAgo.getFullYear() - 10);
-        params.set('release_date.gte', tenYearsAgo.toISOString().slice(0, 10));
+        minDate = tenYearsAgo.toISOString().slice(0, 10);
+        params.set('release_date.gte', minDate);
     }
 
-    console.log('[Filme] filters:', { excludeHorror, excludeRomCom, excludeAdult, excludeLowRating, excludeAnimation, onlyRecent, hardcoreMode });
-    console.log('[Filme] URL:', `${TMDB_BASE}/discover/movie?${params}&page=1`);
     const firstRes = await fetch(`${TMDB_BASE}/discover/movie?${params}&page=1`);
     if (!firstRes.ok) throw new Error(`TMDB error: ${firstRes.status}`);
     const firstData = await firstRes.json();
@@ -61,15 +61,21 @@ async function fetchRandomMovie() {
     const totalPages = Math.min(firstData.total_pages, 500);
     if (totalPages === 0) throw new Error('Nenhum filme encontrado com esses filtros.');
 
-    const randomPage = Math.floor(Math.random() * totalPages) + 1;
-    params.set('page', randomPage);
+    // Try up to 5 random pages — TMDB filters leak old films at high pages, so re-roll if page yields nothing valid
+    for (let attempt = 0; attempt < 5; attempt++) {
+        const randomPage = Math.floor(Math.random() * totalPages) + 1;
+        params.set('page', randomPage);
 
-    const pageRes = await fetch(`${TMDB_BASE}/discover/movie?${params}`);
-    if (!pageRes.ok) throw new Error(`TMDB error: ${pageRes.status}`);
-    const pageData = await pageRes.json();
+        const pageRes = await fetch(`${TMDB_BASE}/discover/movie?${params}`);
+        if (!pageRes.ok) throw new Error(`TMDB error: ${pageRes.status}`);
+        const pageData = await pageRes.json();
 
-    const movies = pageData.results;
-    return movies[Math.floor(Math.random() * movies.length)];
+        let movies = pageData.results;
+        if (minDate) movies = movies.filter(m => m.release_date && m.release_date >= minDate);
+        if (movies.length) return movies[Math.floor(Math.random() * movies.length)];
+    }
+
+    throw new Error('Nenhum filme encontrado com esses filtros.');
 }
 
 function renderMovie(movie) {
