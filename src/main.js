@@ -48,7 +48,7 @@ async function fetchRandomMovie() {
     if (onlyRecent) {
         const tenYearsAgo = new Date();
         tenYearsAgo.setFullYear(tenYearsAgo.getFullYear() - 10);
-        params.set('primary_release_date.gte', tenYearsAgo.toISOString().slice(0, 10));
+        params.set('release_date.gte', tenYearsAgo.toISOString().slice(0, 10));
     }
 
     const firstRes = await fetch(`${TMDB_BASE}/discover/movie?${params}&page=1`);
