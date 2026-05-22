@@ -5,6 +5,8 @@ const IMG_BASE = 'https://image.tmdb.org/t/p/w500';
 const GENRE_HORROR = 27;
 const GENRE_ROMANCE = 10749;
 
+const filmeModal = new bootstrap.Modal(document.getElementById('filme-modal'));
+
 async function fetchRandomMovie() {
     const excludeHorror = document.getElementById('excluir-terror').checked;
     const excludeRomCom = document.getElementById('excluir-comedia').checked;
@@ -49,33 +51,56 @@ async function fetchRandomMovie() {
 
 function renderMovie(movie) {
     document.getElementById('filme-titulo').textContent = movie.title;
-    document.getElementById('filme-ano').textContent = movie.release_date?.slice(0, 4) ?? '';
-    document.getElementById('filme-sinopse').textContent = movie.overview || 'Sem sinopse disponível.';
 
+    const anoEl = document.getElementById('filme-ano');
+    anoEl.textContent = movie.release_date?.slice(0, 4) ?? '';
+    anoEl.classList.toggle('d-none', !movie.release_date);
+
+    const notaEl = document.getElementById('filme-nota');
+    if (movie.vote_average) {
+        notaEl.textContent = `${movie.vote_average.toFixed(1)} / 10`;
+        notaEl.classList.remove('d-none');
+    } else {
+        notaEl.classList.add('d-none');
+    }
+
+    const posterCol = document.getElementById('filme-poster-col');
     const poster = document.getElementById('filme-poster');
     if (movie.poster_path) {
         poster.src = `${IMG_BASE}${movie.poster_path}`;
-        poster.classList.remove('d-none');
+        posterCol.classList.remove('d-none');
     } else {
-        poster.classList.add('d-none');
+        posterCol.classList.add('d-none');
     }
 
-    document.getElementById('filme-card').classList.remove('d-none');
+    document.getElementById('filme-sinopse').textContent = movie.overview || 'Sem sinopse disponível.';
 }
 
-document.getElementById('btn-buscar').addEventListener('click', async () => {
-    const btn = document.getElementById('btn-buscar');
-    btn.disabled = true;
-    btn.textContent = 'Buscando...';
+function setButtonLoading(btn, loading, label) {
+    btn.disabled = loading;
+    btn.innerHTML = loading
+        ? `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Buscando...`
+        : label;
+}
 
+async function buscar(btn, label) {
+    setButtonLoading(btn, true, label);
     try {
         const movie = await fetchRandomMovie();
         renderMovie(movie);
+        filmeModal.show();
     } catch (err) {
         alert(`Erro ao buscar filme: ${err.message}`);
         console.error(err);
     } finally {
-        btn.disabled = false;
-        btn.textContent = 'Buscar filme';
+        setButtonLoading(btn, false, label);
     }
+}
+
+document.getElementById('btn-buscar').addEventListener('click', function () {
+    buscar(this, 'Buscar filme');
+});
+
+document.getElementById('btn-buscar-outro').addEventListener('click', function () {
+    buscar(this, 'Buscar outro');
 });
