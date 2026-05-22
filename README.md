@@ -31,5 +31,7 @@
 | GitHub Actions | CI/CD e injeção de variáveis de ambiente |
 | GitHub Pages | Hospedagem estática |
 
+> Este projeto não tem fins comerciais. Eu só quero evitar a fadiga.
+
 
 Desenvolvido com ♥ por [Jorge Marins](https://buymeacoffee.com/jorgemarins)
