@@ -25,9 +25,7 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Inject API Key
-        env:
-          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
-        run: sed -i "s/TMDB_API_KEY_PLACEHOLDER/${TMDB_API_KEY}/g" src/main.js
+        run: sed -i "s/TMDB_API_KEY_PLACEHOLDER/${{ secrets.TMDB_API_KEY }}/g" src/main.js
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
