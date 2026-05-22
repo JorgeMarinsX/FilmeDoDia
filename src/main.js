@@ -51,6 +51,8 @@ async function fetchRandomMovie() {
         params.set('release_date.gte', tenYearsAgo.toISOString().slice(0, 10));
     }
 
+    console.log('[Filme] filters:', { excludeHorror, excludeRomCom, excludeAdult, excludeLowRating, excludeAnimation, onlyRecent, hardcoreMode });
+    console.log('[Filme] URL:', `${TMDB_BASE}/discover/movie?${params}&page=1`);
     const firstRes = await fetch(`${TMDB_BASE}/discover/movie?${params}&page=1`);
     if (!firstRes.ok) throw new Error(`TMDB error: ${firstRes.status}`);
     const firstData = await firstRes.json();
