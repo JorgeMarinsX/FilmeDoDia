@@ -1,17 +1,28 @@
-const TMDB_API_KEY = 'TMDB_API_KEY_PLACEHOLDER';
+//const TMDB_API_KEY = 'TMDB_API_KEY_PLACEHOLDER';
+const TMDB_API_KEY = '87aacf316759cd77f037515901f4be3e';
 const TMDB_BASE = 'https://api.themoviedb.org/3';
 const IMG_BASE = 'https://image.tmdb.org/t/p/w500';
 
 const GENRE_HORROR = 27;
 const GENRE_ROMANCE = 10749;
+const GENRE_ANIMATION = 16;
+
+const LATIN_SCRIPT_LANGS = 'pt|en|es|fr|it|de|nl|sv|no|da|pl|ro|ca|tr|vi';
 
 const filmeModal = new bootstrap.Modal(document.getElementById('filme-modal'));
+const limiteModal = new bootstrap.Modal(document.getElementById('limite-modal'));
+
+const FETCH_LIMIT = 5;
+const FETCH_COUNT_KEY = 'fetch-count';
 
 async function fetchRandomMovie() {
     const excludeHorror = document.getElementById('excluir-terror').checked;
     const excludeRomCom = document.getElementById('excluir-comedia').checked;
     const excludeAdult = document.getElementById('excluir-adulto').checked;
     const excludeLowRating = document.getElementById('excluir-nota').checked;
+    const excludeAnimation = document.getElementById('excluir-animacao').checked;
+    const onlyRecent = document.getElementById('apenas-recentes').checked;
+    const hardcoreMode = document.getElementById('modo-hardcore').checked;
 
     const params = new URLSearchParams({
         api_key: TMDB_API_KEY,
@@ -23,11 +34,22 @@ async function fetchRandomMovie() {
     const withoutGenres = [];
     if (excludeHorror) withoutGenres.push(GENRE_HORROR);
     if (excludeRomCom) withoutGenres.push(GENRE_ROMANCE);
+    if (excludeAnimation) withoutGenres.push(GENRE_ANIMATION);
     if (withoutGenres.length) params.set('without_genres', withoutGenres.join(','));
 
     if (excludeLowRating) {
         params.set('vote_average.gte', '7');
         params.set('vote_count.gte', '100');
+    }
+
+    if (!hardcoreMode) {
+        params.set('with_original_language', LATIN_SCRIPT_LANGS);
+    }
+
+    if (onlyRecent) {
+        const tenYearsAgo = new Date();
+        tenYearsAgo.setFullYear(tenYearsAgo.getFullYear() - 10);
+        params.set('primary_release_date.gte', tenYearsAgo.toISOString().slice(0, 10));
     }
 
     const firstRes = await fetch(`${TMDB_BASE}/discover/movie?${params}&page=1`);
@@ -84,9 +106,17 @@ function setButtonLoading(btn, loading, label) {
 }
 
 async function buscar(btn, label) {
+    const count = Number(sessionStorage.getItem(FETCH_COUNT_KEY) || 0);
+    if (count >= FETCH_LIMIT) {
+        filmeModal.hide();
+        limiteModal.show();
+        return;
+    }
+
     setButtonLoading(btn, true, label);
     try {
         const movie = await fetchRandomMovie();
+        sessionStorage.setItem(FETCH_COUNT_KEY, count + 1);
         renderMovie(movie);
         filmeModal.show();
     } catch (err) {

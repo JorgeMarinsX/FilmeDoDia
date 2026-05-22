@@ -10,13 +10,13 @@
 </head>
 <body class="bg-light text-dark d-flex flex-column min-vh-100">
 
-    <nav class="navbar bg-primary" data-bs-theme="dark">
-        <div class="container">
-            <span class="navbar-brand fw-bold d-flex align-items-center gap-2">
+    <nav class="navbar bg-primary flex-nowrap" data-bs-theme="dark">
+        <div class="container flex-nowrap">
+            <span class="navbar-brand fw-bold d-flex align-items-center gap-2 flex-shrink-0 me-2">
                 <img src="static/icon.png" alt="Logo" width="32" height="32">
                 Filme do dia
             </span>
-            <span class="navbar-text flex-grow-1 text-end text-truncate small ps-2">o fim definitivo de todas as brigas</span>
+            <span class="navbar-text text-end small ps-2 lh-sm">o fim definitivo de (quase) todas as brigas</span>
         </div>
     </nav>
 
@@ -62,6 +62,24 @@
                                 <label class="form-check-label" for="excluir-series">Excluir séries</label>
                             </div>
                         </div>
+                        <div class="col">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="excluir-animacao">
+                                <label class="form-check-label" for="excluir-animacao">Excluir animações</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="apenas-recentes">
+                                <label class="form-check-label" for="apenas-recentes">Apenas filmes recentes (últimos 10 anos)</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="modo-hardcore">
+                                <label class="form-check-label" for="modo-hardcore">Modo hardcore</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </fieldset>
@@ -80,7 +98,7 @@
 
     <!-- Modal do filme -->
     <div class="modal fade" id="filme-modal" tabindex="-1" aria-labelledby="filme-titulo" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title fw-bold" id="filme-titulo"></h5>
@@ -88,8 +106,8 @@
                 </div>
                 <div class="modal-body p-0 overflow-y-auto">
                     <div class="row g-0">
-                        <div class="col-12 col-sm-4" id="filme-poster-col">
-                            <img id="filme-poster" src="" alt="Poster do filme" class="img-fluid w-100">
+                        <div class="col-12 col-sm-4 p-3 pe-sm-0" id="filme-poster-col">
+                            <img id="filme-poster" src="" alt="Poster do filme" class="img-fluid w-100 rounded">
                         </div>
                         <div class="col-12 col-sm-8">
                             <div class="p-3 p-md-4">
@@ -102,14 +120,54 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary" id="btn-buscar-outro">Buscar outro</button>
+                <div class="modal-footer justify-content-between flex-nowrap">
+                    <span class="text-secondary fst-italic small me-auto text-start">Agora parem de brigar e vão ver o filme!</span>
+                    <div class="d-flex gap-2 flex-shrink-0">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-primary" id="btn-buscar-outro">Buscar outro</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Modal limite atingido -->
+    <div class="modal fade" id="limite-modal" tabindex="-1" aria-labelledby="limite-titulo" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="limite-titulo">Já tá bom, né?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    Você já teve cinco opções.<br>Nada te agrada?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal aviso hardcore -->
+    <div class="modal fade" id="hardcore-modal" tabindex="-1" aria-labelledby="hardcore-titulo" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content border-danger">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title fw-bold" id="hardcore-titulo">⚠️ Modo hardcore</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    Você está habilitando filmes internacionais cujos nomes não estão no nosso alfabeto romano. Boa sorte encontrando onde assistir.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Entendi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="src/hardcore.js"></script>
     <script src="src/main.js"></script>
 </body>
 </html>
