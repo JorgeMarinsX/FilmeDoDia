@@ -78,8 +78,29 @@ async function fetchRandomMovie() {
     throw new Error('Nenhum filme encontrado com esses filtros.');
 }
 
-function renderMovie(movie) {
+async function fetchDirector(movieId) {
+    const res = await fetch(`${TMDB_BASE}/movie/${movieId}/credits?api_key=${TMDB_API_KEY}`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    const director = data.crew?.find(c => c.job === 'Director');
+    return director?.name ?? null;
+}
+
+function renderMovie(movie, director) {
     document.getElementById('filme-titulo').textContent = movie.title;
+
+    const origEl = document.getElementById('filme-titulo-original');
+    const showOrig = movie.original_title && movie.original_title !== movie.title;
+    origEl.textContent = showOrig ? movie.original_title : '';
+    origEl.classList.toggle('d-none', !showOrig);
+
+    const diretorEl = document.getElementById('filme-diretor');
+    if (director) {
+        diretorEl.textContent = director;
+        diretorEl.classList.remove('d-none');
+    } else {
+        diretorEl.classList.add('d-none');
+    }
 
     const anoEl = document.getElementById('filme-ano');
     anoEl.textContent = movie.release_date?.slice(0, 4) ?? '';
@@ -123,8 +144,9 @@ async function buscar(btn, label) {
     setButtonLoading(btn, true, label);
     try {
         const movie = await fetchRandomMovie();
+        const director = await fetchDirector(movie.id);
         sessionStorage.setItem(FETCH_COUNT_KEY, count + 1);
-        renderMovie(movie);
+        renderMovie(movie, director);
         filmeModal.show();
     } catch (err) {
         alert(`Erro ao buscar filme: ${err.message}`);
