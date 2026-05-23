@@ -144,9 +144,13 @@ async function buscar(btn, label) {
     setButtonLoading(btn, true, label);
     try {
         const movie = await fetchRandomMovie();
-        const director = await fetchDirector(movie.id);
+        const [director, streaming] = await Promise.all([
+            fetchDirector(movie.id),
+            fetchStreamingProviders(movie.id),
+        ]);
         sessionStorage.setItem(FETCH_COUNT_KEY, count + 1);
         renderMovie(movie, director);
+        renderStreaming(streaming);
         filmeModal.show();
     } catch (err) {
         alert(`Erro ao buscar filme: ${err.message}`);

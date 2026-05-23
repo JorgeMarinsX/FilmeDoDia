@@ -119,7 +119,14 @@
                                     <span id="filme-nota" class="badge bg-warning text-dark"></span>
                                     <span id="filme-diretor" class="badge bg-info text-dark"></span>
                                 </div>
-                                <p id="filme-sinopse" class="mb-0 lh-base"></p>
+                                <p id="filme-sinopse" class="mb-3 lh-base"></p>
+                                <div id="filme-streaming" class="d-none">
+                                    <p class="small text-secondary mb-2">Disponível em...</p>
+                                    <div id="filme-streaming-lista" class="d-flex flex-wrap gap-2"></div>
+                                    <p class="small text-secondary fst-italic mt-2 mb-0">
+                                        Dados de streaming por <a href="#" id="filme-justwatch-link" target="_blank" rel="noopener" class="text-secondary">JustWatch</a>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -172,6 +179,7 @@
     </div>
 
     <script src="src/hardcore.js"></script>
+    <script src="src/streaming.js"></script>
     <script src="src/main.js"></script>
 </body>
 </html>
