@@ -33,6 +33,12 @@
 
 > Este projeto não tem fins comerciais. Eu só quero evitar a fadiga.
 
+---
+
+## 🔗 Projeto irmão
+
+Procurando uma série em vez de filme? Veja o [Série do Dia](https://jorgemarinsx.github.io/SerieDoDia/) ([repositório](https://github.com/jorgemarinsx/SerieDoDia)).
+
 
 Desenvolvido com ♥ por [Jorge Marins](https://buymeacoffee.com/jorgemarins)
 
