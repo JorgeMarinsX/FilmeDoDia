@@ -6,6 +6,32 @@
 
 ---
 
+## 📸 Screenshots
+
+<table>
+  <thead>
+    <tr>
+      <th align="center">📱 Mobile</th>
+      <th align="center">📟 Tablet</th>
+      <th align="center">🖥️ Desktop</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="center"><img src="screenshots/01-inicial-mobile.png" width="220" alt="Tela inicial – mobile"/></td>
+      <td align="center"><img src="screenshots/01-inicial-tablet.png" width="280" alt="Tela inicial – tablet"/></td>
+      <td align="center"><img src="screenshots/01-inicial-desktop.png" width="380" alt="Tela inicial – desktop"/></td>
+    </tr>
+    <tr>
+      <td align="center"><img src="screenshots/02-modal-mobile.png" width="220" alt="Resultado – mobile"/></td>
+      <td align="center"><img src="screenshots/02-modal-tablet.png" width="280" alt="Resultado – tablet"/></td>
+      <td align="center"><img src="screenshots/02-modal-desktop.png" width="380" alt="Resultado – desktop"/></td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
 ## ✨ Funcionalidades
 
 - Sorteio aleatório de filmes via [TMDB API](https://www.themoviedb.org/)
