@@ -36,11 +36,13 @@
 
 - Sorteio aleatório de filmes via [TMDB API](https://www.themoviedb.org/)
 - Filtros configuráveis antes de cada busca:
-  - Excluir filmes de Terror
-  - Excluir Comédias Românticas
-  - Excluir filmes adultos *(ativado por padrão)*
-  - Excluir filmes com nota menor que 70%
-  - Excluir séries
+  - **Sem terror** — exclui o gênero Terror
+  - **Sem comédia romântica** — exclui o gênero Romance
+  - **Sem animação** — exclui o gênero Animação
+  - **Sem conteúdo adulto** *(ativado por padrão)*
+  - **Só nota 7+** — nota mínima de 7/10, considerando apenas filmes com 100 votos ou mais
+  - **Só dos últimos 10 anos**
+  - **Modo hardcore** — libera títulos fora do alfabeto romano; sem ele, o sorteio fica restrito a idiomas de escrita latina
 - Exibe pôster, título, ano de lançamento, nota e sinopse
 - Layout responsivo e mobile-first com Bootstrap 5
 - Deploy automático via GitHub Pages
